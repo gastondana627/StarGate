@@ -4,14 +4,59 @@
       {
         "src": "public/index.html",
         "use": "@vercel/static"
+      },
+      {
+        "src": "public/styles.css",
+        "use": "@vercel/static"
+      },
+      {
+        "src": "public/script.js",
+        "use": "@vercel/static"
+      },
+      {
+        "src": "images/**",
+        "use": "@vercel/static"
+      },
+      {
+        "src": "audio/**",
+        "use": "@vercel/static"
+      },
+      {
+        "src": "*.json",
+        "use": "@vercel/static"
+      },
+      {
+        "src": "*.otf",
+        "use": "@vercel/static"
+      },
+      {
+        "src": "api/**/*.py",
+        "use": "@vercel/python"
       }
     ],
     "routes": [
+      {
+        "src": "/api/move",
+        "dest": "/api/move.py"
+      },
+      {
+        "src": "/api/pickup",
+        "dest": "/api/pickup.py"
+      },
+      {
+        "src": "/api/drop",
+        "dest": "/api/drop.py"
+      },
+      {
+        "src": "/api/state",
+        "dest": "/api/state.py"
+      },
       {
         "src": "/(.*)",
         "dest": "/public/index.html"
       }
     ]
+  }
   }
   
    

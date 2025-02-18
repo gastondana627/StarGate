@@ -1,0 +1,21 @@
+Fourth Workflow GAIS/
+├── vercel.json
+├── public/
+│   ├── styles.css
+│   ├── script.js
+│   └── index.html
+├── images/
+│   ├── Stargate1.jpg
+│   ├── Stargate.png
+│   ├── robot.png
+│   └── moonrock.png
+├── audio/
+│   ├── a_robot_beeping.wav
+│   └── a_robot_beeping-2.wav
+├── leaderboard.json
+├── game_logic.py
+└── api/
+    ├── move.py
+    ├── pickup.py
+    ├── drop.py
+    └── state.py

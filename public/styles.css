@@ -1,48 +1,87 @@
-/* General reset */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-  }
-  
-  #intro-screen {
+    background-color: #000;
+    color: white;
+}
+
+.screen {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #000;
-    color: white;
     text-align: center;
-  }
-  
-  .intro-img {
-    width: 100%;
+}
+
+#intro-image {
+    width: 50%;
     max-width: 600px;
+}
+
+#usernameInput {
     margin-bottom: 20px;
-  }
-  
-  button {
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    color: black;
+}
+
+#start-btn {
     background-color: #ffb600;
     border: none;
     padding: 15px 30px;
     font-size: 18px;
     cursor: pointer;
     border-radius: 5px;
-  }
-  
-  button:hover {
+    color: black;
+}
+
+#start-btn:hover {
     background-color: #e6a300;
-  }
-  
-  /* Hide game screen initially */
-  #game-screen {
+}
+
+#game-screen {
     display: none;
-    text-align: center;
-  }
-  
-  #stargate, #robot, #moonrock {
-    width: 100px;
-    margin: 20px;
-  }
+}
+
+#game-area {
+    position: relative;
+    width: 800px; /* 8 x 100px cells */
+    height: 800px;
+    border: 2px solid gold;
+    margin: 20px auto;
+}
+
+.robot {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background-image: url('../images/robot.png');
+    background-size: cover;
+    transition: transform 0.3s;
+}
+
+.moonrock {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-image: url('../images/moonrock.png');
+    background-size: cover;
+    border-radius: 50%;
+}
+
+.stargate {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    background-image: url('../images/Stargate.png');
+    background-size: cover;
+    left: 640px; /* (8 - 2) * 80 */
+    top: 640px; /* (8 - 2) * 80 */
+}
+#leaderboard-screen {
+    display: none;
+}
   
   

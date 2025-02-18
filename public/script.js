@@ -1,78 +1,135 @@
-// Show the game screen and hide the intro screen
-document.getElementById('start-btn').addEventListener('click', function() {
-    // Hide the intro screen
-    document.getElementById('intro-screen').style.display = 'none';
-  
-    // Show the game screen
-    document.getElementById('game-screen').style.display = 'block';
-  });
-  
-  // Add movement functionality
-  let robotPosition = { x: 0, y: 0 }; // Initial robot position
-  let carryingRock = false;
-  const stargateZone = [
-    { x: 6, y: 6 },
-    { x: 6, y: 7 },
-    { x: 7, y: 6 },
-    { x: 7, y: 7 }
-  ];
-  
-  const moonrocks = [
-    { x: 2, y: 3 },
-    { x: 4, y: 5 },
-    { x: 6, y: 2 }
-  ];
-  
-  function updateRobotPosition() {
-    const robotElement = document.getElementById('robot');
-    robotElement.style.transform = `translate(${robotPosition.x * 100}px, ${robotPosition.y * 100}px)`;
-  }
-  
-  function moveRobot(dx, dy) {
-    robotPosition.x += dx;
-    robotPosition.y += dy;
-    updateRobotPosition();
-  }
-  
-  // Move the robot when arrow keys are pressed
-  document.addEventListener('keydown', function(event) {
-    if (event.key === 'ArrowUp') moveRobot(0, -1);
-    if (event.key === 'ArrowDown') moveRobot(0, 1);
-    if (event.key === 'ArrowLeft') moveRobot(-1, 0);
-    if (event.key === 'ArrowRight') moveRobot(1, 0);
-  });
-  
-  // Pick up a moonrock if the robot is on one
-  function pickUpRock() {
-    const currentRock = moonrocks.find(r => r.x === robotPosition.x && r.y === robotPosition.y);
-    if (currentRock && !carryingRock) {
-      carryingRock = true;
-      moonrocks.splice(moonrocks.indexOf(currentRock), 1); // Remove rock from grid
-      alert('Moonrock picked up!');
-    } else if (carryingRock) {
-      alert('You are already carrying a moonrock!');
-    } else {
-      alert('No moonrock at this position!');
+document.addEventListener('DOMContentLoaded', function() {
+    let username = "";
+    let robotPosition = [0, 0];
+    let carryingRock = false;
+    let moonrocks = [];
+    let score = 0;
+    let gameStarted = false;
+
+    const introScreen = document.getElementById('intro-screen');
+    const gameScreen = document.getElementById('game-screen');
+    const leaderboardScreen = document.getElementById('leaderboard-screen');
+    const usernameInput = document.getElementById('usernameInput');
+    const scoreDisplay = document.getElementById('score');
+    const moonrocksContainer = document.getElementById('moonrocks-container');
+
+    function updateUI() {
+        const robotElement = document.getElementById('robot');
+        robotElement.style.transform = `translate(${robotPosition[0] * 100}px, ${robotPosition[1] * 100}px)`;
+
+        moonrocksContainer.innerHTML = '';
+        moonrocks.forEach(rock => {
+            const rockElement = document.createElement('div');
+            rockElement.classList.add('moonrock');
+            rockElement.style.transform = `translate(${rock[0] * 100}px, ${rock[1] * 100}px)`;
+            moonrocksContainer.appendChild(rockElement);
+        });
+
+        scoreDisplay.innerText = `Score: ${score}`;
     }
-  }
-  
-  // Drop the moonrock at the Stargate
-  function dropRock() {
-    const atStargate = stargateZone.some(r => r.x === robotPosition.x && r.y === robotPosition.y);
-    if (atStargate && carryingRock) {
-      carryingRock = false;
-      alert('Moonrock delivered to Stargate!');
-    } else if (!atStargate) {
-      alert('You must drop the rock at the Stargate!');
-    } else {
-      alert('You are not carrying a moonrock!');
+    function fetchLeaderboard() {
+        fetch('/leaderboard.json')  // Fetch leaderboard.json directly
+            .then(response => response.json())
+            .then(leaderboardData => {
+                const leaderboardList = document.getElementById('leaderboard-list');
+                leaderboardList.innerHTML = ''; // Clear existing entries
+
+                leaderboardData.forEach(entry => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${entry.username}: ${entry.time}s`;
+                    leaderboardList.appendChild(listItem);
+                });
+
+                gameScreen.style.display = 'none';
+                leaderboardScreen.style.display = 'flex';
+            })
+            .catch(error => console.error('Error fetching leaderboard:', error));
     }
-  }
-  
-  // Listen for 'p' to pick up rock and 'd' to drop it
-  document.addEventListener('keydown', function(event) {
-    if (event.key === 'p') pickUpRock();
-    if (event.key === 'd') dropRock();
-  });
+
+    function fetchGameState() {
+        fetch('/api/state')
+            .then(response => response.json())
+            .then(data => {
+                robotPosition = data.robot_position;
+                carryingRock = data.carrying_rock;
+                moonrocks = data.moonrocks;
+                score = data.score;
+                updateUI();
+            })
+            .catch(error => console.error('Error fetching game state:', error));
+    }
+
+    function startGame() {
+        username = usernameInput.value.trim();
+        if (username === "") {
+            alert("Please enter a username!");
+            return;
+        }
+        introScreen.style.display = 'none';
+        gameScreen.style.display = 'flex';
+        gameStarted = true;
+        fetchGameState();
+    }
+
+    function moveRobot(dx, dy) {
+        fetch(`/api/move?dx=${dx}&dy=${dy}`)
+            .then(response => response.json())
+            .then(data => {
+                robotPosition = data.robot_position;
+                carryingRock = data.carrying_rock;
+                moonrocks = data.moonrocks;
+                score = data.score;
+                updateUI();
+            })
+            .catch(error => console.error('Error moving robot:', error));
+    }
+
+    function pickUpRock() {
+        fetch('/api/pickup')
+            .then(response => response.json())
+            .then(data => {
+                if (data.result.status === 'success') {
+                    carryingRock = true;
+                    fetchGameState();
+                } else {
+                    alert(data.result.message);
+                }
+            })
+            .catch(error => console.error('Error picking up rock:', error));
+    }
+
+    function dropRock() {
+        fetch('/api/drop')
+            .then(response => response.json())
+            .then(data => {
+                if (data.result.status === 'success') {
+                    carryingRock = false;
+                    fetchGameState();
+                } else {
+                    alert(data.result.message);
+                }
+            })
+            .catch(error => console.error('Error dropping rock:', error));
+    }
+
+    document.getElementById('start-btn').addEventListener('click', startGame);
+
+    document.addEventListener('keydown', function(event) {
+        if (!gameStarted) return;
+
+        switch (event.key) {
+            case 'ArrowUp': moveRobot(0, -1); break;
+            case 'ArrowDown': moveRobot(0, 1); break;
+            case 'ArrowLeft': moveRobot(-1, 0); break;
+            case 'ArrowRight': moveRobot(1, 0); break;
+            case 'p': pickUpRock(); break;
+            case 'd': dropRock(); break;
+        }
+    });
+    document.getElementById('back-to-intro').addEventListener('click', function() {
+        leaderboardScreen.style.display = 'none';
+        introScreen.style.display = 'flex';
+    });
+});
   
   
