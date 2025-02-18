@@ -1,56 +1,41 @@
 body {
     font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f0f0f0;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     margin: 0;
-    padding: 0;
   }
   
-  h1 {
-    color: #2e3d49;
+  #game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   
-  #game-container {
-    margin: 20px;
-  }
-  
-  #game-grid {
+  #grid {
     display: grid;
     grid-template-columns: repeat(8, 50px);
     grid-template-rows: repeat(8, 50px);
-    gap: 5px;
-    justify-content: center;
+    gap: 2px;
   }
   
   .grid-cell {
     width: 50px;
     height: 50px;
-    background-color: #e0e0e0;
     border: 1px solid #ccc;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
+    background-color: #fff;
   }
   
-  .grid-cell.robot {
-    background-color: #ff0;
-  }
-  
-  .grid-cell.moonrock {
-    background-color: #00f;
-  }
-  
-  #startButton {
+  #status {
     margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #2e3d49;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
   }
   
-  #startButton:hover {
-    background-color: #1a252f;
+  button {
+    margin: 5px;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
   }
   

@@ -4,22 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stargate Game</title>
-  <link rel="stylesheet" href="static/style.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Welcome to the Stargate Game</h1>
-  
-  <div id="game-container">
-    <button id="startButton">Start Game</button>
-    <div id="game-info">
+  <h1>Stargate Game</h1>
+
+  <div id="game">
+    <div id="grid"></div>
+
+    <div id="status">
+      <p id="position">Position: (0, 0)</p>
       <p id="score">Score: 0</p>
-      <p id="game-status">Game Status: Waiting</p>
+      <p id="message"></p>
     </div>
-    <div id="game-grid">
-      <!-- This will be dynamically filled by JS -->
+
+    <div id="controls">
+      <button onclick="move('up')">Move Up</button>
+      <button onclick="move('down')">Move Down</button>
+      <button onclick="move('left')">Move Left</button>
+      <button onclick="move('right')">Move Right</button>
+      <button onclick="pickup()">Pick Up Moonrock</button>
+      <button onclick="drop()">Drop Moonrock</button>
     </div>
   </div>
-  
-  <script src="static/game.js"></script>
+
+  <script src="game.js"></script>
 </body>
 </html>
+
