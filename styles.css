@@ -1,33 +1,33 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, black, teal, hotpink); /* Gradient */
+    background: linear-gradient(to bottom, black, teal, hotpink);
     color: white;
-}
-
-.screen {
+  }
+  
+  .screen {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
     text-align: center;
-}
-
-#intro-image {
+  }
+  
+  #intro-image {
     width: 50%;
     max-width: 600px;
-}
-
-#usernameInput {
+  }
+  
+  #usernameInput {
     margin-bottom: 20px;
     padding: 10px;
     border-radius: 5px;
     border: none;
     color: black;
-}
-
-#start-btn {
+  }
+  
+  #start-btn {
     background-color: #ffb600;
     border: none;
     padding: 15px 30px;
@@ -35,51 +35,53 @@ body {
     cursor: pointer;
     border-radius: 5px;
     color: black;
-}
-
-#start-btn:hover {
+  }
+  
+  #start-btn:hover {
     background-color: #e6a300;
-}
-
-#game-screen {
+  }
+  
+  #game-screen {
     display: none;
-}
-
-#game-area {
+  }
+  
+  #game-area {
     position: relative;
-    width: 800px; /* 8 x 100px cells */
+    width: 800px; /* 8 cells x 100px each */
     height: 800px;
     border: 2px solid gold;
     margin: 20px auto;
-}
-
-.robot {
+  }
+  
+  .robot {
     position: absolute;
     width: 80px;
     height: 80px;
-    background-image: url('../images/robot.png');
+    background-image: url('assets/robot.png');
     background-size: cover;
     transition: transform 0.3s;
-}
-
-.moonrock {
+  }
+  
+  .moonrock {
     position: absolute;
     width: 50px;
     height: 50px;
-    background-image: url('../images/moonrock.png');
+    background-image: url('assets/moonrock.png');
     background-size: cover;
     border-radius: 50%;
-}
-
-.stargate {
+  }
+  
+  .stargate {
     position: absolute;
     width: 160px;
     height: 160px;
-    background-image: url('../images/Stargate.png');
+    background-image: url('assets/Stargate.png');
     background-size: cover;
-    left: 640px; /* (8 - 2) * 80 */
-    top: 640px; /* (8 - 2) * 80 */
-}
-#leaderboard-screen {
+    left: 640px; /* (8-2)*80 */
+    top: 640px;
+  }
+  
+  #leaderboard-screen {
     display: none;
-}
+  }
+  
