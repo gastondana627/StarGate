@@ -2,23 +2,10 @@
     "version": 2,
     "builds": [
       {
-        "src": "api/game_logic.py",
-        "use": "@vercel/python"
-      },
-      {
-        "src": "public/*",
+        "src": "index.html",
         "use": "@vercel/static"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/api/(.*)",
-        "dest": "/api/game_logic.py"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "/public/$1"
       }
     ]
   }
+  
   
