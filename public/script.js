@@ -13,9 +13,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const scoreDisplay = document.getElementById('score');
     const moonrocksContainer = document.getElementById('moonrocks-container');
 
+    // Ensure elements exist before using them
+    if (!introScreen || !gameScreen || !leaderboardScreen || !usernameInput || !scoreDisplay || !moonrocksContainer) {
+        console.error("One or more required elements not found.  Check your HTML.");
+        return; // Stop execution if elements are missing
+    }
+
     function updateUI() {
         const robotElement = document.getElementById('robot');
-        robotElement.style.transform = `translate(${robotPosition[0] * 100}px, ${robotPosition[1] * 100}px)`;
+        if(robotElement) {
+            robotElement.style.transform = `translate(${robotPosition[0] * 100}px, ${robotPosition[1] * 100}px)`;
+        }
 
         moonrocksContainer.innerHTML = '';
         moonrocks.forEach(rock => {
@@ -47,9 +55,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function fetchGameState() {
+        console.log("fetchGameState function called!");
         fetch('/api/state')
-            .then(response => response.json())
+            .then(response => {
+                console.log("fetchGameState: Response received", response);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);  // Handle non-200 responses
+                }
+                return response.json();
+            })
             .then(data => {
+                console.log("fetchGameState: Data received", data);
                 robotPosition = data.robot_position;
                 carryingRock = data.carrying_rock;
                 moonrocks = data.moonrocks;
@@ -71,48 +87,13 @@ document.addEventListener('DOMContentLoaded', function() {
         fetchGameState();
     }
 
-    function moveRobot(dx, dy) {
-        fetch(`/api/move?dx=${dx}&dy=${dy}`)
-            .then(response => response.json())
-            .then(data => {
-                robotPosition = data.robot_position;
-                carryingRock = data.carrying_rock;
-                moonrocks = data.moonrocks;
-                score = data.score;
-                updateUI();
-            })
-            .catch(error => console.error('Error moving robot:', error));
+    const startButton = document.getElementById('start-btn'); // Get button here
+    if (startButton) {  // Check if the element exists
+        startButton.addEventListener('click', startGame); // Attach listener
+    } else {
+        console.error("Start button not found!");  // Log an error if button isn't found
     }
 
-    function pickUpRock() {
-        fetch('/api/pickup')
-            .then(response => response.json())
-            .then(data => {
-                if (data.result.status === 'success') {
-                    carryingRock = true;
-                    fetchGameState();
-                } else {
-                    alert(data.result.message);
-                }
-            })
-            .catch(error => console.error('Error picking up rock:', error));
-    }
-
-    function dropRock() {
-        fetch('/api/drop')
-            .then(response => response.json())
-            .then(data => {
-                if (data.result.status === 'success') {
-                    carryingRock = false;
-                    fetchGameState();
-                } else {
-                    alert(data.result.message);
-                }
-            })
-            .catch(error => console.error('Error dropping rock:', error));
-    }
-
-    document.getElementById('start-btn').addEventListener('click', startGame);
 
     document.addEventListener('keydown', function(event) {
         if (!gameStarted) return;
