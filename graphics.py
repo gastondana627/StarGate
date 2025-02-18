@@ -14,14 +14,19 @@ pygame.display.set_caption("Moonrock Collection Game")
 
 # Load and scale images
 try:
-    robot_img = pygame.image.load("robot.png")
+    # Use os.path.join to load images from the public/images folder
+    robot_img = pygame.image.load(os.path.join("public", "images", "robot.png"))
     robot_img = pygame.transform.scale(robot_img, (CELL_SIZE, CELL_SIZE))
 
-    moonrock_img = pygame.image.load("moonrock.png")
+    moonrock_img = pygame.image.load(os.path.join("public", "images", "moonrock.png"))
     moonrock_img = pygame.transform.scale(moonrock_img, (CELL_SIZE, CELL_SIZE))
 
-    stargate_img = pygame.image.load("stargate.png")
+    stargate_img = pygame.image.load(os.path.join("public", "images", "stargate.png"))
     stargate_img = pygame.transform.scale(stargate_img, (CELL_SIZE * 2, CELL_SIZE * 2))
+
+    # Load Stargate1.jpg for the intro screen
+    stargate_intro_img = pygame.image.load(os.path.join("public", "images", "Stargate1.jpg"))
+    stargate_intro_img = pygame.transform.scale(stargate_intro_img, (WIDTH, HEIGHT))  # Adjust as needed
 except pygame.error as e:
     print(f"Error loading image: {e}")
     pygame.quit()
@@ -222,122 +227,52 @@ while running:
 
             # Save the updated leaderboard
             save_leaderboard()
-            print("WINNING CONDITION MET!")
 
     # --- DRAWING
-    screen.fill(BLACK)  # Set background color to black
+    screen.fill(WHITE)
 
+    # Display the intro screen if needed
     if not username_entered:
-        # Draw the username input screen
-        text_surface = title_font.render("Enter your name:", True, WHITE)
-        text_rect = text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 4))
-        screen.blit(text_surface, text_rect)
+        screen.blit(stargate_intro_img, (0, 0))
+        draw_text_with_wrapping(screen, "Enter Your Username:", font, BLACK, pygame.Rect(WIDTH // 2 - 150, HEIGHT // 2 - 60, 300, 50))
+        draw_text_with_wrapping(screen, username, font, BLACK, pygame.Rect(WIDTH // 2 - 150, HEIGHT // 2, 300, 50))
 
-        username_surface = font.render(username, True, WHITE)
-        username_rect = username_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-        screen.blit(username_surface, username_rect)
+    # Render the game state if the game has started
+    elif game_started:
+        # Draw the robot
+        robot_x, robot_y = robot_position
+        screen.blit(robot_img, (robot_x * CELL_SIZE, robot_y * CELL_SIZE))
 
-        instructions_text = "Press ENTER to submit"
-        instructions_surface = font.render(instructions_text, True, WHITE)
-        instructions_rect = instructions_surface.get_rect(center=(WIDTH // 2, HEIGHT * 3 // 4))
-        screen.blit(instructions_surface, instructions_rect)
+        # Draw the moonrocks
+        for rock_x, rock_y in moonrocks:
+            screen.blit(moonrock_img, (rock_x * CELL_SIZE, rock_y * CELL_SIZE))
 
-    elif not game_started and not instructions_displayed:
-        # Draw the start screen
-        title_text = title_font.render("Welcome to StarGate!", True, WHITE)
-        title_rect = title_text.get_rect(center=(WIDTH // 2, HEIGHT // 4))
-        screen.blit(title_text, title_rect)
+        # Draw the Stargate
+        screen.blit(stargate_img, ((GRID_SIZE - 2) * CELL_SIZE, (GRID_SIZE - 2) * CELL_SIZE))
 
-        instructions_text = "Press any key to continue to Instructions"
-        instructions_rect = pygame.Rect(WIDTH // 6, HEIGHT // 2, WIDTH * 2 // 3, HEIGHT // 2)
-        draw_text_with_wrapping(screen, instructions_text, font, WHITE, instructions_rect)
-
-    elif not game_started and instructions_displayed:
-        # Draw instructions screen
-        instructions_title = font.render("Instructions", True, WHITE)
-        instructions_title_rect = instructions_title.get_rect(center=(WIDTH // 2, HEIGHT // 6))
-        screen.blit(instructions_title, instructions_title_rect)
-
-        instructions_text = "Can you help Bobot pick up the moon rocks and deliver them safely to Stargate? Use W, A, S, D to move around. Press SPACE to pick up a rock and ENTER to drop it off."
-        instructions_rect = pygame.Rect(WIDTH // 6, HEIGHT // 3, WIDTH * 2 // 3, HEIGHT * 2 // 3)
-        draw_text_with_wrapping(screen, instructions_text, instruction_font, WHITE, instructions_rect)
-
-        continue_text = font.render("Press any key to start!", True, WHITE)
-        continue_rect = continue_text.get_rect(center=(WIDTH // 2, HEIGHT * 5 // 6))
-        screen.blit(continue_text, continue_rect)
-
-    elif game_started and not game_won and username_entered:
-        # Draw the game normally if not won
-        # Draw grid lines
-        for x in range(0, WIDTH, CELL_SIZE):
-            for y in range(0, HEIGHT, CELL_SIZE):
-                rect = pygame.Rect(x, y, CELL_SIZE, CELL_SIZE)
-                pygame.draw.rect(screen, GRAY, rect, 1)
-
-        # Draw Stargate zone as a 2x2 area
-        stargate_top_left = (6, 6)
-        screen.blit(stargate_img, (stargate_top_left[0] * CELL_SIZE, stargate_top_left[1] * CELL_SIZE))
-
-        # Draw moonrocks from the global set
-        for rock in moonrocks:
-            screen.blit(moonrock_img, (rock[0] * CELL_SIZE, rock[1] * CELL_SIZE))
-
-        # Draw robot (based on robot_position)
-        screen.blit(robot_img, (robot_position[0] * CELL_SIZE, robot_position[1] * CELL_SIZE))
-
-        # Display Score
-        score_text = font.render(f"Score: {score}", True, WHITE)
+        # Display the score
+        score_text = font.render(f"Score: {score}/{TOTAL_ROCKS}", True, BLACK)
         screen.blit(score_text, (10, 10))
 
-        # Display Carrying Status
-        carrying_text = font.render(f"Carrying: {'Yes' if carrying_rock else 'No'}", True, WHITE)
-        screen.blit(carrying_text, (10, 40))
+        # Display the timer
+        if game_started and not game_won:
+            elapsed_time = int(time.time() - start_time)
+            timer_text = font.render(f"Time: {elapsed_time}s", True, BLACK)
+            screen.blit(timer_text, (WIDTH - 150, 10))
 
-        # Display Timer
-        elapsed_time = time.time() - start_time
-        timer_text = font.render(f"Time: {elapsed_time:.1f}s", True, WHITE)
-        screen.blit(timer_text, (10, 70))
-    else:
-        # Draw the winning screen and leaderboard
-        screen.fill(GOLD)
-        win_text = large_font.render("You Won!", True, BLACK)
-        win_rect = win_text.get_rect(center=(WIDTH // 2, HEIGHT // 8))
-        screen.blit(win_text, win_rect)
+        # Display win message if the game is won
+        if game_won:
+            total_time = int(end_time - start_time)
+            win_message = large_font.render(f"Congrats {username}!", True, GOLD)
+            screen.blit(win_message, (WIDTH // 2 - win_message.get_width() // 2, HEIGHT // 2 - 100))
 
-        # Display time taken
-        total_time = end_time - start_time
-        time_text = font.render(f"Time Taken: {total_time:.1f}s", True, BLACK)
-        time_rect = time_text.get_rect(center=(WIDTH // 2, HEIGHT * 2 // 8))
-        screen.blit(time_text, time_rect)
+            time_message = font.render(f"Time: {total_time}s", True, GOLD)
+            screen.blit(time_message, (WIDTH // 2 - time_message.get_width() // 2, HEIGHT // 2))
 
-        stay_tuned_text = font.render("Stay tuned for more levels!", True, BLACK)
-        stay_tuned_rect = stay_tuned_text.get_rect(center=(WIDTH // 2, HEIGHT * 3 // 8))
-        screen.blit(stay_tuned_text, stay_tuned_rect)
+            leaderboard_button = font.render("Press ENTER to view Leaderboard", True, BLACK)
+            screen.blit(leaderboard_button, (WIDTH // 2 - leaderboard_button.get_width() // 2, HEIGHT // 2 + 50))
 
-        # Display the Leaderboard
-        leaderboard_x = WIDTH // 4  # Start at 1/4 of the screen width
-        leaderboard_y = HEIGHT // 2  # Start at the middle of the screen
-
-        # Leaderboard title with background
-        leaderboard_title = large_font.render("Leaderboard", True, BLACK)
-        leaderboard_title_rect = leaderboard_title.get_rect(center=(WIDTH // 2, leaderboard_y))
-
-        # Draw background for the leaderboard title
-        leaderboard_bg_rect = leaderboard_title_rect.inflate(20, 10)  # Add padding
-        pygame.draw.rect(screen, LIGHT_BLUE, leaderboard_bg_rect)  # Draw the rectangle
-        screen.blit(leaderboard_title, leaderboard_title_rect)  # Then draw the text on top
-
-        # Adjust the starting Y position for the list of scores
-        leaderboard_y += leaderboard_title.get_height()
-
-        for i, score_data in enumerate(leaderboard_data):
-            # Create the text for the leaderboard entry
-            entry_text = f"{i+1}. {score_data['username']}: {score_data['time']:.1f}s"
-            entry_surface = leaderboard_font.render(entry_text, True, BLACK)
-            entry_rect = entry_surface.get_rect(center=(WIDTH // 2, leaderboard_y + i * entry_surface.get_height()))
-            screen.blit(entry_surface, entry_rect)
-
-    pygame.display.flip()  # Update display
-    clock.tick(30)  # Control the frame rate
+    pygame.display.flip()
+    clock.tick(60)
 
 pygame.quit()
