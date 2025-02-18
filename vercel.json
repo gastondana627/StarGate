@@ -2,23 +2,19 @@
     "version": 2,
     "builds": [
       {
-        "src": "public/index.html",
+        "src": "index.html",
         "use": "@vercel/static"
       },
       {
-        "src": "public/styles.css",
+        "src": "styles.css",
         "use": "@vercel/static"
       },
       {
-        "src": "public/script.js",
+        "src": "script.js",
         "use": "@vercel/static"
       },
       {
-        "src": "images/**",
-        "use": "@vercel/static"
-      },
-      {
-        "src": "audio/**",
+        "src": "assets/**",
         "use": "@vercel/static"
       },
       {
@@ -28,6 +24,28 @@
       {
         "src": "*.py",
         "use": "@vercel/python"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/move",
+        "dest": "/api/move.py"
+      },
+      {
+        "src": "/api/pickup",
+        "dest": "/api/pickup.py"
+      },
+      {
+        "src": "/api/drop",
+        "dest": "/api/drop.py"
+      },
+      {
+        "src": "/api/state",
+        "dest": "/api/state.py"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/public/index.html"
       }
     ]
 }
