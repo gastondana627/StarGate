@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StarGate Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="intro-screen" class="screen">
+        <h1>Welcome to StarGate Game!</h1>
+        <p>Enter Your Username</p>
+        <input type="text" id="usernameInput">
+        <button id="start-btn">Start Game</button>
+        <img src="../images/Stargate1.jpg" alt="Stargate Intro" id="intro-image">
+    </div>
+
+    <div id="game-screen" class="screen" style="display: none;">
+        <h1>StarGate Game</h1>
+        <p>Use the arrow keys to move the robot, 'P' to pick up moonrock, 'D' to drop it at the Stargate.</p>
+
+        <div id="game-area" class="game-area">
+            <div id="robot" class="robot"></div>
+            <div id="moonrocks-container">
+                <!-- Moonrock images will be dynamically placed here -->
+            </div>
+            <div id="stargate" class="stargate"></div>
+        </div>
+
+        <div id="controls">
+            <p>Press 'P' to pick up moonrock, 'D' to drop it at the Stargate</p>
+            <p id="score">Score: 0</p>
+        </div>
+    </div>
+    <div id="leaderboard-screen" class="screen" style="display: none;">
+        <h1>Leaderboard</h1>
+        <ol id="leaderboard-list">
+            <!-- Leaderboard entries will be dynamically added here -->
+        </ol>
+        <button id="back-to-intro">Back to Intro</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
