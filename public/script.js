@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const startButton = document.getElementById('start-btn'); // Get button here
     if (startButton) {  // Check if the element exists
+         console.log("Start button exists", startButton)
         startButton.addEventListener('click', startGame); // Attach listener
     } else {
         console.error("Start button not found!");  // Log an error if button isn't found

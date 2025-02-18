@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #000;
+    background: linear-gradient(to bottom, black, teal, hotpink); /* Gradient */
     color: white;
 }
 
@@ -83,5 +83,3 @@ body {
 #leaderboard-screen {
     display: none;
 }
-  
-  
