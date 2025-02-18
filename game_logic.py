@@ -15,6 +15,27 @@ score = 0
 # Define Stargate Zone (2x2)
 STARGATE_ZONE = {(6, 6), (6, 7), (7, 6), (7, 7)}
 
+# Score file for persistence
+SCORE_FILE = "score.json"
+
+def save_score():
+    """Save the score to a file."""
+    with open(SCORE_FILE, "w") as f:
+        json.dump({"high_score": score}, f)
+
+def load_score():
+    """Load the score from a file."""
+    global score
+    try:
+        with open(SCORE_FILE, "r") as f:
+            data = json.load(f)
+            score = data.get("high_score", 0)
+    except FileNotFoundError:
+        score = 0  # Default score if file not found
+
+# Load score when game starts
+load_score()
+
 # Generate random moonrock positions ensuring they don't overlap with the Stargate
 moonrocks = set()
 while len(moonrocks) < 5:
@@ -58,6 +79,7 @@ def drop_rock():
     if robot_position in STARGATE_ZONE:
         carrying_rock = False
         score += 1  # Increase score when rock is delivered
+        save_score()  # Save updated score
         return {"status": "success", "message": f"Moonrock delivered to Stargate! Score: {score}"}
 
     return {"status": "error", "message": "You must drop the rock at the Stargate!"}
@@ -74,15 +96,20 @@ def get_game_state():
 def handler(request):
     """Handle API requests."""
     path = request.path.strip("/")
+    
     if path == "move":
-        # Example move command
         dx, dy = int(request.args.get("dx", 0)), int(request.args.get("dy", 0))
         move_robot(dx, dy)
+        return json.dumps(get_game_state())  # ✅ Return updated state
+    
     elif path == "pickup":
         return json.dumps(pick_up_rock())
+    
     elif path == "drop":
         return json.dumps(drop_rock())
+    
     elif path == "state":
         return json.dumps(get_game_state())
+    
     else:
         return json.dumps({"status": "error", "message": "Invalid API endpoint"})
