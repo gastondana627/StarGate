@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         scoreDisplay.innerText = `Score: ${score}`;
     }
+
     function fetchLeaderboard() {
         fetch('/leaderboard.json')  // Fetch leaderboard.json directly
             .then(response => response.json())
@@ -96,7 +97,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error("Start button not found!");  // Log an error if button isn't found
     }
 
-
     document.addEventListener('keydown', function(event) {
         if (!gameStarted) return;
 
@@ -114,5 +114,3 @@ document.addEventListener('DOMContentLoaded', function() {
         introScreen.style.display = 'flex';
     });
 });
-  
-  

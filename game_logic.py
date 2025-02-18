@@ -1,7 +1,6 @@
 ## GasMan
 ## February 9, 2025
 
-# game_logic.py
 import json
 import random
 
