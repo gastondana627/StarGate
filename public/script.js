@@ -76,6 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function startGame() {
+        console.log("startGame function called!"); // Add this line
         username = usernameInput.value.trim();
         if (username === "") {
             alert("Please enter a username!");
