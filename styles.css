@@ -1,8 +1,9 @@
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, black, teal, hotpink);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom, #000000, #002b36, #4b0082);
     color: white;
+    overflow: hidden;
   }
   
   .screen {
@@ -15,42 +16,49 @@ body {
   }
   
   #intro-image {
-    width: 50%;
-    max-width: 600px;
+    width: 80%;
+    max-width: 400px;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
   }
   
   #usernameInput {
     margin-bottom: 20px;
-    padding: 10px;
+    padding: 12px;
     border-radius: 5px;
-    border: none;
-    color: black;
+    border: 2px solid #00f2fe;
+    background: #1a1a1a;
+    color: white;
+    width: 250px;
   }
   
-  #start-btn {
-    background-color: #ffb600;
+  #start-btn, #restart-btn {
+    background: linear-gradient(45deg, #00f2fe, #4facfe);
     border: none;
-    padding: 15px 30px;
+    padding: 12px 30px;
     font-size: 18px;
+    font-weight: bold;
     cursor: pointer;
-    border-radius: 5px;
-    color: black;
+    border-radius: 25px;
+    color: white;
+    transition: transform 0.2s, box-shadow 0.2s;
   }
   
-  #start-btn:hover {
-    background-color: #e6a300;
-  }
-  
-  #game-screen {
-    display: none;
+  #start-btn:hover, #restart-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.6);
   }
   
   #game-area {
     position: relative;
-    width: 800px; /* 8 cells x 100px each */
-    height: 800px;
-    border: 2px solid gold;
+    width: 640px; /* 8 cells x 80px each */
+    height: 640px;
+    border: 4px solid #4facfe;
     margin: 20px auto;
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 30px rgba(79, 172, 254, 0.4);
+    overflow: hidden;
   }
   
   .robot {
@@ -58,17 +66,23 @@ body {
     width: 80px;
     height: 80px;
     background-image: url('assets/robot.png');
-    background-size: cover;
-    transition: transform 0.3s;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.15s ease-out;
+    z-index: 10;
   }
   
   .moonrock {
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     background-image: url('assets/moonrock.png');
-    background-size: cover;
-    border-radius: 50%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 20px; /* Center in 80px cell */
+    z-index: 4;
   }
   
   .stargate {
@@ -76,12 +90,36 @@ body {
     width: 160px;
     height: 160px;
     background-image: url('assets/Stargate.png');
-    background-size: cover;
-    left: 640px; /* (8-2)*80 */
-    top: 640px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    top: 480px; /* (6, 6) * 80 */
+    left: 480px;
+    z-index: 2;
+    opacity: 0.9;
+  }
+
+  .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+  }
+
+  .hidden {
+      display: none !important;
   }
   
-  #leaderboard-screen {
-    display: none;
+  #stats {
+      font-size: 24px;
+      font-weight: bold;
+      color: #00f2fe;
+      margin-top: 10px;
   }
-  
