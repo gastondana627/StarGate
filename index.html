@@ -11,10 +11,9 @@
   <div id="intro-screen" class="screen">
     <h1>Welcome to StarGate Game!</h1>
     <p>Enter Your Username</p>
-    <input type="text" id="usernameInput" />
+    <input type="text" id="usernameInput" placeholder="Username" />
     <button id="start-btn">Start Game</button>
-    <!-- Use the assets folder for images -->
-    <img src="Stargate1.jpg" alt="Stargate Intro" id="intro-image" />
+    <img src="assets/Stargate1.jpg" alt="Stargate Intro" id="intro-image" />
   </div>
 
   <!-- Game Screen -->
@@ -25,22 +24,24 @@
       Enter to drop it at the Stargate.
     </p>
 
-    <div id="game-area" class="game-area">
-      <div id="robot" class="robot"></div>
-      <div id="moonrocks-container"></div>
+    <div id="game-area">
+      <!-- Grid Background -->
       <div id="stargate" class="stargate"></div>
+      <div id="moonrocks-container"></div>
+      <div id="robot" class="robot"></div>
+
+      <!-- Game Over Overlay -->
+      <div id="game-over-overlay" class="overlay hidden">
+        <h2 id="final-result">GAME OVER</h2>
+        <p>Your Score: <span id="final-score">0</span></p>
+        <button id="restart-btn">Play Again</button>
+      </div>
     </div>
 
-    <div id="controls">
-      <p id="score">Score: 0</p>
+    <div id="stats">
+      <span id="score">Score: 0</span> |
+      <span id="timer">Time: 60s</span>
     </div>
-  </div>
-
-  <!-- Leaderboard Screen -->
-  <div id="leaderboard-screen" class="screen" style="display: none;">
-    <h1>Leaderboard</h1>
-    <ol id="leaderboard-list"></ol>
-    <button id="back-to-intro">Back to Intro</button>
   </div>
 
   <script src="script.js"></script>

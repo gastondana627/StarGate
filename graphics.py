@@ -14,18 +14,18 @@ pygame.display.set_caption("Moonrock Collection Game")
 
 # Load and scale images
 try:
-    # Use os.path.join to load images from the public/images folder
-    robot_img = pygame.image.load(os.path.join("public", "images", "robot.png"))
+    # Use os.path.join to load images from the assets folder
+    robot_img = pygame.image.load(os.path.join("assets", "robot.png"))
     robot_img = pygame.transform.scale(robot_img, (CELL_SIZE, CELL_SIZE))
 
-    moonrock_img = pygame.image.load(os.path.join("public", "images", "moonrock.png"))
+    moonrock_img = pygame.image.load(os.path.join("assets", "moonrock.png"))
     moonrock_img = pygame.transform.scale(moonrock_img, (CELL_SIZE, CELL_SIZE))
 
-    stargate_img = pygame.image.load(os.path.join("public", "images", "stargate.png"))
+    stargate_img = pygame.image.load(os.path.join("assets", "Stargate.png"))
     stargate_img = pygame.transform.scale(stargate_img, (CELL_SIZE * 2, CELL_SIZE * 2))
 
     # Load Stargate1.jpg for the intro screen
-    stargate_intro_img = pygame.image.load(os.path.join("public", "images", "Stargate1.jpg"))
+    stargate_intro_img = pygame.image.load(os.path.join("assets", "Stargate1.jpg"))
     stargate_intro_img = pygame.transform.scale(stargate_intro_img, (WIDTH, HEIGHT))  # Adjust as needed
 except pygame.error as e:
     print(f"Error loading image: {e}")
@@ -41,8 +41,8 @@ GOLD = (255, 215, 0)
 LIGHT_BLUE = (135, 206, 235)  # For leaderboard background
 
 # Font setup
-FONT_FILENAME = "Phantomonia.ttf"  # Just the filename
-FONTS_DIR = "fonts"  # Directory where fonts are stored
+FONT_FILENAME = "Phage Regular.otf"  # Just the filename
+FONTS_DIR = "assets"  # Directory where fonts are stored
 FONT_PATH = os.path.join(FONTS_DIR, FONT_FILENAME)  # Full path to the font
 
 print(f"Attempting to load font from: {FONT_PATH}")  # DEBUG: Print the font path
@@ -90,8 +90,8 @@ except pygame.error as e:
 
 # Load Sounds
 try:
-    pickup_sound = pygame.mixer.Sound("a_robot_beeping.wav")
-    drop_sound = pygame.mixer.Sound("a_robot_beeping-2.wav")
+    pickup_sound = pygame.mixer.Sound(os.path.join("assets", "a_robot_beeping.wav"))
+    drop_sound = pygame.mixer.Sound(os.path.join("assets", "a_robot_beeping-2.wav"))
 except pygame.error as e:
     print(f"Error loading sound: {e}")
     pickup_sound = None
@@ -189,13 +189,13 @@ while running:
                             pygame.mixer.Sound.play(drop_sound)
 
                     # Move robot based on key press
-                    if event.key == pygame.K_w:
+                    if event.key == pygame.K_w or event.key == pygame.K_UP:
                         move_robot(0, -1)
-                    elif event.key == pygame.K_s:
+                    elif event.key == pygame.K_s or event.key == pygame.K_DOWN:
                         move_robot(0, 1)
-                    elif event.key == pygame.K_a:
+                    elif event.key == pygame.K_a or event.key == pygame.K_LEFT:
                         move_robot(-1, 0)
-                    elif event.key == pygame.K_d:
+                    elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                         move_robot(1, 0)
 
     # --- GAME STATE UPDATE (Get the latest info!)

@@ -22,32 +22,38 @@
         "use": "@vercel/static"
       },
       {
-        "src": "*.py",
+        "src": "api/*.py",
         "use": "@vercel/python"
       }
     ],
     "routes": [
       {
         "src": "/api/move",
-        "dest": "/api/move.py"
+        "dest": "api/move.py"
       },
       {
         "src": "/api/pickup",
-        "dest": "/api/pickup.py"
+        "dest": "api/pickup.py"
       },
       {
         "src": "/api/drop",
-        "dest": "/api/drop.py"
+        "dest": "api/drop.py"
       },
       {
         "src": "/api/state",
-        "dest": "/api/state.py"
+        "dest": "api/state.py"
+      },
+      {
+        "src": "/api/reset",
+        "dest": "api/reset.py"
+      },
+      {
+        "src": "/assets/(.*)",
+        "dest": "/assets/$1"
       },
       {
         "src": "/(.*)",
-        "dest": "/public/index.html"
+        "dest": "/$1"
       }
     ]
 }
-
-  
